@@ -54,7 +54,7 @@ export default function Introduction(){
                 {/* Objetivo Principal */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center text-white text-2xl">
+                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center text-white text-4xl">
                         🎯
                         </div>
                         <h2 className="text-2xl font-bold text-slate-900">Objetivo do Projeto</h2>
@@ -69,7 +69,7 @@ export default function Introduction(){
                 {/* Ideias de Análise */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-2xl">
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-4xl">
                         💡
                         </div>
                         <h2 className="text-2xl font-bold text-slate-900">Ideias de Análise</h2>
@@ -89,7 +89,7 @@ export default function Introduction(){
                 {/* Base de Dados */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white text-2xl">
+                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white text-4xl">
                         📊
                         </div>
                         <h2 className="text-2xl font-bold text-slate-900">Base de Dados</h2>
@@ -128,7 +128,7 @@ export default function Introduction(){
                 {/* Colunas do Dataset */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-2xl">
+                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-4xl">
                         🗂️
                         </div>
                         <h2 className="text-2xl font-bold text-slate-900">Estrutura dos Dados</h2>
@@ -151,7 +151,7 @@ export default function Introduction(){
                 {/* Objetivo Final */}
                 <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white mb-8">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center text-2xl">
+                        <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center text-4xl">
                         🏆
                         </div>
                         <h2 className="text-2xl font-bold">Resultado Esperado</h2>

@@ -1,4 +1,4 @@
-import { BookOpen, ChevronRight, Home, Menu, X } from "lucide-react";
+import { BookOpen, ChartColumn, ChevronRight, Home, Menu, Tally1, Tally2, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,10 @@ export default function Sidebar(){
 
     const menuItems = [
         { path: '', label: 'Início', icon: Home },
-        { path: 'introduction', label: 'Introdução', icon: BookOpen }
+        { path: 'introduction', label: 'Introdução', icon: BookOpen },
+        { path: 'partial-01', label: 'Parcial 01', icon: Tally1 },
+        { path: 'partial-02', label: 'Parcial 02', icon: Tally2 },
+        { path: 'central-teorem', label: 'Teorema Central', icon: ChartColumn }
     ];
 
     return(
