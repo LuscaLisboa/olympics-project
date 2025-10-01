@@ -1,18 +1,29 @@
 import { ChevronRight, SquareSigma } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { BlockMath } from "react-katex";
+import { useEffect, useState } from "react";
+import type { StatisticsValues } from "../types/statistics_values";
+import { fetchStatisticsData } from "../functions/fetchStatisticsData";
 
 export default function Partial01(){
     const navigate = useNavigate();
+
+    const [statisticsData, setStatisticsData] = useState<StatisticsValues | null>(null)
+    const [loadingStatistics, setLoadingStatistics] = useState(true);
     
+    useEffect(() => {
+        fetchStatisticsData({ setStatisticsData, setLoadingStatistics });
+    }, [])
+
+
     const statisticsFormula = [
-        {label: "Média (aritmética)", desc: "valor médio das observações", formula: "\\bar{x}=\\frac 1 \\eta\\sum_{i=1}^n x_i"},
-        {label: "Mediana", desc: "valor central quando os dados ordenados", formula: "\\text{Se } \\eta \\text{ ímpar} \\rightarrow \\text{mediana} = x_{(k)} \\text{ com } K = \\frac{\\eta + 1}{2}", formula2: "\\text{Se } \\eta \\text{ par } \\rightarrow \\text{ média dos dois centrais } =  \\frac{x_{\\left(\\tfrac{\\eta}{2}\\right)} + x_{\\left(\\tfrac{\\eta}{2}+1\\right)}}{2}"},
-        {label: "Moda", desc: "valor que ocorre com maior frequência (pode haver multimodalidade)", formula: "\\text{moda} = \\text{valor(es) com maior n° de contagem}"},
-        {label: "Variância", desc: "média dos quadrados das diferenças em relação à média; mede dispersão", formula: "\\text{Populacional} \\quad \\sigma^{2} = \\frac{1}{N} \\sum_{i=1}^{N} \\left( x_{i} - \\bar{x} \\right)^{2}", formula2: "\\text{Amostral} \\quad S^{2} = \\frac{1}{\\eta - 1} \\sum_{i=1}^{\\eta} \\left( x_{i} - \\bar{x} \\right)^{2}"},
-        {label: "Desvio padrão", desc: "raiz quadrada da variância; unidade original", formula: "\\text{Populacional} \\quad \\sigma = \\sqrt{\\sigma^{2}}", formula2: "\\text{Amostral} \\quad s = \\sqrt{s^{2}}"},
-        {label: "Covariância", desc: "mede direção conjunta entre duas variáveis X e Y", formula: "\\operatorname{cov}(X,Y) = \\frac{1}{\\eta - 1} \\sum_{i=1}^{\\eta} (x_i - \\bar{x})(y_i - \\bar{y})"},
-        {label: "Correlação (Pearson)", desc: "covariância normalizada entre -1 e 1", formula: "r_{XY} = \\frac{cov(X,Y)}{s_X s_Y}"}
+        {label: "Média (aritmética)", op: "average", desc: "valor médio das observações", formula: "\\bar{x}=\\frac 1 \\eta\\sum_{i=1}^n x_i"},
+        {label: "Mediana", op: "median", desc: "valor central quando os dados ordenados", formula: "\\text{Se } \\eta \\text{ ímpar} \\rightarrow \\text{mediana} = x_{(k)} \\text{ com } K = \\frac{\\eta + 1}{2}", formula2: "\\text{Se } \\eta \\text{ par } \\rightarrow \\text{ média dos dois centrais } =  \\frac{x_{\\left(\\tfrac{\\eta}{2}\\right)} + x_{\\left(\\tfrac{\\eta}{2}+1\\right)}}{2}"},
+        {label: "Moda", op: "moda", desc: "valor que ocorre com maior frequência (pode haver multimodalidade)", formula: "\\text{moda} = \\text{valor(es) com maior n° de contagem}"},
+        {label: "Variância", op: "variance", desc: "média dos quadrados das diferenças em relação à média; mede dispersão", formula: "\\text{Populacional} \\quad \\sigma^{2} = \\frac{1}{N} \\sum_{i=1}^{N} \\left( x_{i} - \\bar{x} \\right)^{2}", formula2: "\\text{Amostral} \\quad S^{2} = \\frac{1}{\\eta - 1} \\sum_{i=1}^{\\eta} \\left( x_{i} - \\bar{x} \\right)^{2}"},
+        {label: "Desvio padrão", op: "standard_deviation", desc: "raiz quadrada da variância; unidade original", formula: "\\text{Populacional} \\quad \\sigma = \\sqrt{\\sigma^{2}}", formula2: "\\text{Amostral} \\quad s = \\sqrt{s^{2}}"},
+        {label: "Covariância", op: "covariance", desc: "mede direção conjunta entre duas variáveis X e Y", formula: "\\operatorname{cov}(X,Y) = \\frac{1}{\\eta - 1} \\sum_{i=1}^{\\eta} (x_i - \\bar{x})(y_i - \\bar{y})"},
+        {label: "Correlação (Pearson)", op: "correlation", desc: "covariância normalizada entre -1 e 1", formula: "r_{XY} = \\frac{cov(X,Y)}{s_X s_Y}"}
     ];
 
     return (
@@ -111,12 +122,23 @@ export default function Partial01(){
                     </div>
                     <div className="grid gap-4">
                         {statisticsFormula.map((f, index) => (
-                        <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                            <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-400 rounded-lg flex items-center justify-center text-white text-sm font-bold mt-1">
-                            {index + 1}
+                        <div key={index} className="bg-slate-50 rounded-xl border border-slate-100">
+                            <div className="flex items-start gap-4 p-4">
+                                <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-400 rounded-lg flex items-center justify-center text-white text-sm font-bold mt-1">
+                                {index + 1}
+                                </div>
+                                <p className="text-slate-700 flex-1"><span className="font-bold">{f.label}</span><br /> {f.desc}</p>
+                                <p className="text-slate-700 flex-1"><BlockMath math={f.formula}/> <br /> {f.formula2 && <BlockMath math={f.formula2}/>}</p>
                             </div>
-                            <p className="text-slate-700 flex-1"><span className="font-bold">{f.label}</span><br /> {f.desc}</p>
-                            <p className="text-slate-700 flex-1"><BlockMath math={f.formula}/> <br /> {f.formula2 && <BlockMath math={f.formula2}/>}</p>
+                            <div className="flex flex-row">
+                                <div className="w-full bg-red-300">
+                                    A
+                                </div>
+                                <div className="w-full bg-green-300"> 
+                                    {f.op}
+                                </div>
+                            </div>
+
                         </div>
                         ))}
                     </div>
