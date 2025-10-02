@@ -15,7 +15,6 @@ export default function Partial01(){
         fetchStatisticsData({ setStatisticsData, setLoadingStatistics });
     }, [])
 
-
     const statisticsFormula = [
         {label: "Média (aritmética)", op: "average", desc: "valor médio das observações", formula: "\\bar{x}=\\frac 1 \\eta\\sum_{i=1}^n x_i"},
         {label: "Mediana", op: "median", desc: "valor central quando os dados ordenados", formula: "\\text{Se } \\eta \\text{ ímpar} \\rightarrow \\text{mediana} = x_{(k)} \\text{ com } K = \\frac{\\eta + 1}{2}", formula2: "\\text{Se } \\eta \\text{ par } \\rightarrow \\text{ média dos dois centrais } =  \\frac{x_{\\left(\\tfrac{\\eta}{2}\\right)} + x_{\\left(\\tfrac{\\eta}{2}+1\\right)}}{2}"},
@@ -130,12 +129,29 @@ export default function Partial01(){
                                 <p className="text-slate-700 flex-1"><span className="font-bold">{f.label}</span><br /> {f.desc}</p>
                                 <p className="text-slate-700 flex-1"><BlockMath math={f.formula}/> <br /> {f.formula2 && <BlockMath math={f.formula2}/>}</p>
                             </div>
-                            <div className="flex flex-row">
-                                <div className="w-full bg-red-300">
-                                    A
+                            <div className="p-4 flex flex-row">
+                                <div className="w-full pl-1">
+                                    Resultados: 
                                 </div>
-                                <div className="w-full bg-green-300"> 
-                                    {f.op}
+                                <div className="w-full pr-1 bg-green-300/20"> 
+                                    {loadingStatistics ? (
+                                        <p>Carregando...</p>
+                                    ) : (
+                                        <div>
+                                            <ul>
+                                            { /* Statistics */ }
+                                            {Object.entries(statisticsData?.statistics ?? {}).map(([cKey, cValue]) => 
+                                                Object.entries(cValue ?? {}).map(([sKey, sValue]) => 
+                                                    sKey === f.op ? (
+                                                        <li key={`${cKey}-${sKey}`}>
+                                                        {cKey}: {sValue}
+                                                        </li>
+                                                    ) : null
+                                                )
+                                            )}
+                                            </ul>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
