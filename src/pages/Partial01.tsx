@@ -159,6 +159,19 @@ export default function Partial01(){
                         ))}
                     </div>
                 </div>
+
+                {/* Cálculo Comparativo */}
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-4xl">
+                        <SquareSigma size={40}/>
+                        </div>
+                        <h2 className="text-2xl font-bold text-slate-900">Cálculo Comparativo</h2>
+                    </div>
+                    <div className="grid gap-4">
+                        
+                    </div>
+                </div>
             </div>
         </div>
     );

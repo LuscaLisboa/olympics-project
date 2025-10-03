@@ -73,7 +73,7 @@ export default function Sidebar(){
                 {/* Footer da sidebar */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700">
                     <div className="text-sm text-slate-400 text-center">
-                        Feito com ❤️ em React
+                        Feito com ❤️ em React TS
                     </div>
                 </div>
             </div>
