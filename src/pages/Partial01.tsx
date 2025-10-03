@@ -4,6 +4,8 @@ import { BlockMath } from "react-katex";
 import { useEffect, useState } from "react";
 import type { StatisticsValues } from "../types/statistics_values";
 import { fetchStatisticsData } from "../functions/fetchStatisticsData";
+import RenderStatistics from "../components/RenderStatistics";
+import HistogramChart from "../components/HistogramChart";
 
 export default function Partial01(){
     const navigate = useNavigate();
@@ -18,11 +20,19 @@ export default function Partial01(){
     const statisticsFormula = [
         {label: "Média (aritmética)", op: "average", desc: "valor médio das observações", formula: "\\bar{x}=\\frac 1 \\eta\\sum_{i=1}^n x_i"},
         {label: "Mediana", op: "median", desc: "valor central quando os dados ordenados", formula: "\\text{Se } \\eta \\text{ ímpar} \\rightarrow \\text{mediana} = x_{(k)} \\text{ com } K = \\frac{\\eta + 1}{2}", formula2: "\\text{Se } \\eta \\text{ par } \\rightarrow \\text{ média dos dois centrais } =  \\frac{x_{\\left(\\tfrac{\\eta}{2}\\right)} + x_{\\left(\\tfrac{\\eta}{2}+1\\right)}}{2}"},
-        {label: "Moda", op: "moda", desc: "valor que ocorre com maior frequência (pode haver multimodalidade)", formula: "\\text{moda} = \\text{valor(es) com maior n° de contagem}"},
+        {label: "Moda", op: "mode", desc: "valor que ocorre com maior frequência (pode haver multimodalidade)", formula: "\\text{moda} = \\text{valor(es) com maior n° de contagem}"},
         {label: "Variância", op: "variance", desc: "média dos quadrados das diferenças em relação à média; mede dispersão", formula: "\\text{Populacional} \\quad \\sigma^{2} = \\frac{1}{N} \\sum_{i=1}^{N} \\left( x_{i} - \\bar{x} \\right)^{2}", formula2: "\\text{Amostral} \\quad S^{2} = \\frac{1}{\\eta - 1} \\sum_{i=1}^{\\eta} \\left( x_{i} - \\bar{x} \\right)^{2}"},
         {label: "Desvio padrão", op: "standard_deviation", desc: "raiz quadrada da variância; unidade original", formula: "\\text{Populacional} \\quad \\sigma = \\sqrt{\\sigma^{2}}", formula2: "\\text{Amostral} \\quad s = \\sqrt{s^{2}}"},
         {label: "Covariância", op: "covariance", desc: "mede direção conjunta entre duas variáveis X e Y", formula: "\\operatorname{cov}(X,Y) = \\frac{1}{\\eta - 1} \\sum_{i=1}^{\\eta} (x_i - \\bar{x})(y_i - \\bar{y})"},
         {label: "Correlação (Pearson)", op: "correlation", desc: "covariância normalizada entre -1 e 1", formula: "r_{XY} = \\frac{cov(X,Y)}{s_X s_Y}"}
+    ];
+
+    const statisticsGraphs = [
+        {label: "Histograma", desc: "representação gráfica em colunas ou em barras de um conjunto de dados previamente tabulado e dividido em classes uniformes ou não uniformes"},
+        {label: "Percentil" , desc: ""},
+        {label: "Medidas de dispersão" , desc: ""},
+        {label: "Assimetria" , desc: ""},
+        {label: "Curtose" , desc: ""}
     ];
 
     return (
@@ -122,36 +132,18 @@ export default function Partial01(){
                     <div className="grid gap-4">
                         {statisticsFormula.map((f, index) => (
                         <div key={index} className="bg-slate-50 rounded-xl border border-slate-100">
-                            <div className="flex items-start gap-4 p-4">
+                            <div className="flex items-start gap-4 pt-4 pl-4 pr-4">
                                 <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-400 rounded-lg flex items-center justify-center text-white text-sm font-bold mt-1">
                                 {index + 1}
                                 </div>
-                                <p className="text-slate-700 flex-1"><span className="font-bold">{f.label}</span><br /> {f.desc}</p>
+                                <p className="text-slate-700 flex-1"><span className="font-bold">{f.label}</span><br />{f.desc}</p>
                                 <p className="text-slate-700 flex-1"><BlockMath math={f.formula}/> <br /> {f.formula2 && <BlockMath math={f.formula2}/>}</p>
                             </div>
-                            <div className="p-4 flex flex-row">
-                                <div className="w-full pl-1">
-                                    Resultados: 
-                                </div>
-                                <div className="w-full pr-1 bg-green-300/20"> 
+                            <div className="pb-4 pl-4 pr-4">
+                                <div className="w-full"> 
                                     {loadingStatistics ? (
                                         <p>Carregando...</p>
-                                    ) : (
-                                        <div>
-                                            <ul>
-                                            { /* Statistics */ }
-                                            {Object.entries(statisticsData?.statistics ?? {}).map(([cKey, cValue]) => 
-                                                Object.entries(cValue ?? {}).map(([sKey, sValue]) => 
-                                                    sKey === f.op ? (
-                                                        <li key={`${cKey}-${sKey}`}>
-                                                        {cKey}: {sValue}
-                                                        </li>
-                                                    ) : null
-                                                )
-                                            )}
-                                            </ul>
-                                        </div>
-                                    )}
+                                    ) : RenderStatistics(f.op, statisticsData)}
                                 </div>
                             </div>
 
@@ -160,17 +152,35 @@ export default function Partial01(){
                     </div>
                 </div>
 
-                {/* Cálculo Comparativo */}
+                {/* Gráficos */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-4xl">
-                        <SquareSigma size={40}/>
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-4xl">
+                        📊
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-900">Cálculo Comparativo</h2>
+                        <h2 className="text-2xl font-bold text-slate-900">Gráficos</h2>
                     </div>
                     <div className="grid gap-4">
-                        
-                    </div>
+                        {statisticsGraphs.map((g, index) => (
+                        <div key={index} className="bg-slate-50 rounded-xl border border-slate-100">
+                            <div className="flex items-start gap-4 pt-4 pl-4 pr-4">
+                                <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-400 rounded-lg flex items-center justify-center text-white text-sm font-bold mt-1">
+                                {index + 1}
+                                </div>
+                                <p className="text-slate-700 flex-1"><span className="font-bold">{g.label}</span><br />{g.desc}</p>
+                            </div>
+                            <div className="pb-4 pl-4 pr-4 flex flex-row">
+                                {g.label === "Histograma" ? (
+                                    <div className="flex gap-4">
+                                        <HistogramChart column="Age" bins={20} />
+                                        <HistogramChart column="Height" bins={20} />
+                                        <HistogramChart column="Weight" bins={20} />
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
+                        ))}
+                    </div> 
                 </div>
             </div>
         </div>
