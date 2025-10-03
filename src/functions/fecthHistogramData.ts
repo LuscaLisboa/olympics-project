@@ -8,6 +8,8 @@ interface Props{
 } 
 
 export async function fetchHistogramData({column, bins, setData, setLoadingHistogram }: Props){
+    setLoadingHistogram(true);
+    
     try{
         fetch(`http://127.0.0.1:8000/histogram?column=${column}&bins=${bins}`)
         .then((res) => res.json())
@@ -17,7 +19,7 @@ export async function fetchHistogramData({column, bins, setData, setLoadingHisto
                 count: json.counts[i],
             }));
             setData(formatted);
-        })
+        });
     }catch(error) {
         console.error("fetchHistogramData error: ", error);
     }finally{

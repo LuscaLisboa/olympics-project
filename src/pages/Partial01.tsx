@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import type { StatisticsValues } from "../types/statistics_values";
 import { fetchStatisticsData } from "../functions/fetchStatisticsData";
 import RenderStatistics from "../components/RenderStatistics";
-import HistogramChart from "../components/HistogramChart";
+import HistogramChart from "../components/Charts/HistogramChart";
+import PercentileChart from "../components/Charts/PercentileChart";
 
 export default function Partial01(){
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function Partial01(){
 
     const statisticsGraphs = [
         {label: "Histograma", desc: "representação gráfica em colunas ou em barras de um conjunto de dados previamente tabulado e dividido em classes uniformes ou não uniformes"},
-        {label: "Percentil" , desc: ""},
+        {label: "Percentil" , desc: "medidas que dividem a amostra em 100 partes, cada uma com uma percentagem de dados aproximadamente igual"},
         {label: "Medidas de dispersão" , desc: ""},
         {label: "Assimetria" , desc: ""},
         {label: "Curtose" , desc: ""}
@@ -37,7 +38,7 @@ export default function Partial01(){
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 p-6 lg:p-8">
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 {/* Breadcrumb */}
                 <nav className="mb-6">
                     <div className="flex items-center gap-2 text-sm text-slate-600">
@@ -171,10 +172,17 @@ export default function Partial01(){
                             </div>
                             <div className="pb-4 pl-4 pr-4 flex flex-row">
                                 {g.label === "Histograma" ? (
-                                    <div className="flex gap-4">
+                                    <div className="grid grid-rows3 gap-4">
                                         <HistogramChart column="Age" bins={20} />
                                         <HistogramChart column="Height" bins={20} />
                                         <HistogramChart column="Weight" bins={20} />
+                                    </div>
+                                ) : null}
+                                {g.label === "Percentil" ? (
+                                    <div className="flex gap-4">
+                                        <PercentileChart column="Age"/>
+                                        <PercentileChart column="Height"/>
+                                        <PercentileChart column="Weight"/>
                                     </div>
                                 ) : null}
                             </div>
