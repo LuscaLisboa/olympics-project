@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchHistogramData } from "../../functions/fecthHistogramData";
+import { fetchHistogramData } from "../../functions/fetchHistogramData";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { info } from "../../functions/info_getColumnInfo";
 
@@ -19,7 +19,7 @@ export default function HistogramChart({ column, bins = 10 }: Props) {
     const CustomTooltip = ({active, payload, label}: any) => {
     if (active && payload && payload.length) {
         return (
-        <div className="bg-white text-white p-3 rounded-lg shadow-xl border border-gray-700">
+        <div className="bg-white text-white p-3 rounded-lg shadow-xl border" style={{ borderColor: info(column)?.gradient[1] }}>
             <p className="text-gray-800 font-semibold">{label} {info(column)?.unit}</p>
             <p style={{ color: info(column)?.gradient[0] }}>Frequência: {payload[0].value}</p>
         </div>

@@ -19,7 +19,7 @@ export default function PercentileChart({ column }: Props){
         if (active && payload && payload.length) {
             const unit = column === "Age" ? "anos" : column === "Height" ? "cm" : "kg";
             return (
-                <div className="bg-white p-3 rounded-lg shadow-xl border-2" style={{ borderColor: info(column)?.gradient[0] }}>
+                <div className="bg-white p-3 rounded-lg shadow-xl border" style={{ borderColor: info(column)?.gradient[1] }}>
                     <p className="font-bold text-gray-800">{payload[0].payload.percentile}%</p>
                     <p className={`text-[${info(column)?.gradient[0]}] font-semibold`}>
                         {payload[0].value.toFixed(column === "Age" ? 0 : 1)} {unit}
@@ -87,7 +87,7 @@ export default function PercentileChart({ column }: Props){
                             <XAxis 
                                 dataKey="percentile" 
                                 tick={{ fill: '#4b5563', fontSize: 12 }}
-                                label={{ value: 'Percentil', position: 'insideBottom', offset: -5, fill: '#4b5563' }}
+                                label={{ value: 'Percentil', position: 'insideBottom', offset: -2, fill: '#4b5563' }}
                             />
                             <YAxis 
                                 tick={{ fill: '#4b5563', fontSize: 12 }}
@@ -104,10 +104,10 @@ export default function PercentileChart({ column }: Props){
                                 type="monotone" 
                                 dataKey="value" 
                                 stroke={info(column)?.gradient[0]} 
-                                strokeWidth={3}
+                                strokeWidth={2}
                                 fill={`url(#gradient-percentile-${column})`}
-                                dot={{ fill: info(column)?.gradient[1], strokeWidth: 2, r: 5 }}
-                                activeDot={{ r: 7, strokeWidth: 2 }}
+                                dot={{ fill: info(column)?.gradient[1], strokeWidth: 2, r: 4 }}
+                                activeDot={{ r: 6, strokeWidth: 2 }}
                             />
                         </AreaChart>
                     </ResponsiveContainer>

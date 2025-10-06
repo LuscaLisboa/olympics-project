@@ -4,6 +4,7 @@ const getColumnInfo = (column: string) => {
             return {
                 title: "Idade",
                 titlePercentile: "Idade por Percentis",
+                titleDispersion: "Medidas de Dispersão - Idade",
                 subtitle: "Análise de faixa etária",
                 unit: "anos",
                 gradient: ["#8b5cf6", "#6366f1"],
@@ -13,6 +14,7 @@ const getColumnInfo = (column: string) => {
             return {
                 title: "Altura",
                 titlePercentile: "Altura por Percentis",
+                titleDispersion: "Medidas de Dispersão - Altura",
                 subtitle: "Análise de estatura",
                 unit: "cm",
                 gradient: ["#10b981", "#14b8a6"],
@@ -22,6 +24,7 @@ const getColumnInfo = (column: string) => {
             return {
                 title: "Peso",
                 titlePercentile: "Peso por Percentis",
+                titleDispersion: "Medidas de Dispersão - Peso",
                 subtitle: "Análise de massa corporal",
                 unit: "kg",
                 gradient: ["#f59e0b", "#ef4444"],

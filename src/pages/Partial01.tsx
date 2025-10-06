@@ -7,6 +7,7 @@ import { fetchStatisticsData } from "../functions/fetchStatisticsData";
 import RenderStatistics from "../components/RenderStatistics";
 import HistogramChart from "../components/Charts/HistogramChart";
 import PercentileChart from "../components/Charts/PercentileChart";
+import DispersionMeasuresChart from "../components/Charts/DispersionMeasuresChart";
 
 export default function Partial01(){
     const navigate = useNavigate();
@@ -183,6 +184,13 @@ export default function Partial01(){
                                         <PercentileChart column="Age"/>
                                         <PercentileChart column="Height"/>
                                         <PercentileChart column="Weight"/>
+                                    </div>
+                                ) : null}
+                                {g.label === "Medidas de dispersão" ? (
+                                    <div className="w-full flex flex-col gap-4">
+                                        <DispersionMeasuresChart column="Age"/>
+                                        <DispersionMeasuresChart column="Height"/>
+                                        <DispersionMeasuresChart column="Weight"/>
                                     </div>
                                 ) : null}
                             </div>
