@@ -8,6 +8,7 @@ import RenderStatistics from "../components/RenderStatistics";
 import HistogramChart from "../components/Charts/HistogramChart";
 import PercentileChart from "../components/Charts/PercentileChart";
 import DispersionMeasuresChart from "../components/Charts/DispersionMeasuresChart";
+import AsymmetryChart from "../components/Charts/AsymmetryChart";
 
 export default function Partial01(){
     const navigate = useNavigate();
@@ -32,8 +33,8 @@ export default function Partial01(){
     const statisticsGraphs = [
         {label: "Histograma", desc: "representação gráfica em colunas ou em barras de um conjunto de dados previamente tabulado e dividido em classes uniformes ou não uniformes"},
         {label: "Percentil" , desc: "medidas que dividem a amostra em 100 partes, cada uma com uma percentagem de dados aproximadamente igual"},
-        {label: "Medidas de dispersão" , desc: ""},
-        {label: "Assimetria" , desc: ""},
+        {label: "Medidas de dispersão" , desc: "mostra o quão esticada ou espremida uma distribuição é"},
+        {label: "Assimetria" , desc: "medida da falta de simetria de uma determinada distribuição de frequência"},
         {label: "Curtose" , desc: ""}
     ];
 
@@ -191,6 +192,18 @@ export default function Partial01(){
                                         <DispersionMeasuresChart column="Age"/>
                                         <DispersionMeasuresChart column="Height"/>
                                         <DispersionMeasuresChart column="Weight"/>
+                                    </div>
+                                ) : null}
+                                {g.label === "Assimetria" ? (
+                                    <div className="w-full flex flex-col gap-4">
+                                        <AsymmetryChart column="Age" />
+                                        <AsymmetryChart column="Height" />
+                                        <AsymmetryChart column="Weight" />
+                                    </div>
+                                ) : null}
+                                {g.label === "Curtose" ? (
+                                    <div>
+A
                                     </div>
                                 ) : null}
                             </div>
