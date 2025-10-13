@@ -310,7 +310,7 @@ export default function KurtosisChart({ column }: Props){
                     Comparação das Distribuições
                 </h3>
                 <ResponsiveContainer width="100%" height={350}>
-                    <LineChart data={comparisonData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                    <LineChart data={comparisonData} margin={{ top: 0, right: 5, left: -30, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                         <XAxis 
                             dataKey="x" 
