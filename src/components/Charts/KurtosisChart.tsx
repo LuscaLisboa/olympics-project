@@ -137,17 +137,20 @@ export default function KurtosisChart({ column }: Props){
                         <span>Leptokurtic (Picos altos)</span>
                     </div>
 
-                    <div className="relative h-12 bg-gradient-to-r from-amber-400 via-gray-300 to-purple-500 rounded-full overflow-hidden shadow-lg grid">
+                    <div className="relative h-12 bg-gradient-to-r from-amber-400 via-gray-100 to-purple-500 rounded-full overflow-hidden shadow-lg grid">
                         <div className="absolute inset-0 flex">
                             <div className="w-1/3 bg-gradient-to-r from-amber-400 to-transparent opacity-20"></div>
                             <div className="w-1/3 bg-gray-300 opacity-20"></div>
                             <div className="w-1/3 bg-gradient-to-r from-transparent to-purple-500 opacity-20"></div>
                         </div>
                         <div
-                            className="absolute top-0 bottom-0 w-1.5 bg-gray-900 transition-all duration-500 shadow-xl"
-                            style={{ left: `${position}%`, transform: "translateX(-50%)" }}
+                            className="absolute top-0 bottom-0 w-1.5 transition-all duration-500 shadow-xl"
+                            style={{ left: `${position}%`, transform: "translateX(-50%)", backgroundColor: info(column)?.gradient[0] }}
                         >
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-gray-900 rounded-full border-4 border-white shadow-xl"></div>
+                            <div 
+                                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-gray-900 rounded-full border-4 border-white shadow-xl"
+                                style={{ backgroundColor: info(column)?.gradient[0] }}
+                            ></div>
                         </div>
                     </div>
 
