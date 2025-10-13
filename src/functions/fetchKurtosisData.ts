@@ -1,18 +1,18 @@
-import type { AsymmetryData } from "../types/asymmetry_data";
+import type { KurtosisData } from "../types/kurtosis_data";
 
 interface Props{
     column: "Age" | "Height" | "Weight";
-    setData(data: AsymmetryData): void;
+    setData(data: KurtosisData): void;
     setLoading(is: boolean): void;
 } 
 
-export async function fetchAsymmetryData({ column, setData, setLoading }: Props) {
+export async function fetchKurtosisData({ column, setData, setLoading }: Props){
     setLoading(true);
-
+    
     try{
-        fetch(`http://127.0.0.1:8000/asymmetry?column=${column}`)
+        fetch(`http://127.0.0.1:8000/dispersion_measures?column=${column}`)
         .then((res) => res.json())
-        .then((json: AsymmetryData) => {
+        .then((json: KurtosisData) => {
             setData(json);
         })
     }catch(error) {

@@ -10,10 +10,10 @@ interface Props{
 
 export default function HistogramChart({ column, bins = 10 }: Props) {
     const [data, setData] = useState<{ bin: string, count: number }[]>([]);
-    const [loadingHistogram, setLoadingHistogram] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchHistogramData({column, bins, setData, setLoadingHistogram});
+        fetchHistogramData({column, bins, setData, setLoading});
     }, [column, bins])
 
     const CustomTooltip = ({active, payload, label}: any) => {
@@ -34,7 +34,7 @@ export default function HistogramChart({ column, bins = 10 }: Props) {
                 <p className={`text-sm font-semibold`} style={{ color: info(column)?.gradient[0] }}>{info(column)?.title}</p>
                 <p className="text-sm text-gray-600">{info(column)?.subtitle}</p>
             </div>
-            {!loadingHistogram && (
+            {!loading && (
                 <ResponsiveContainer width={900} height={350}>
                     <BarChart data={data} margin={{ top: 5, right: 5, left: 1, bottom: 5 }}>
                         <defs>

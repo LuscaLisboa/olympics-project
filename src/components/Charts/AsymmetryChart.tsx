@@ -10,13 +10,13 @@ interface Props{
 
 export default function AsymmetryChart({ column }: Props){
     const [data, setData] = useState<AsymmetryData>();
-    const [loadingAsymmetry, setLoadingAsymmetry] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchAsymmetryData({column, setData, setLoadingAsymmetry})
+        fetchAsymmetryData({column, setData, setLoading})
     }, [column]);
 
-    if (loadingAsymmetry || !data) {
+    if (loading || !data) {
         return (
             <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-2xl shadow-lg p-6">
                 <div className="animate-pulse">
@@ -32,7 +32,7 @@ export default function AsymmetryChart({ column }: Props){
         if (active && payload && payload.length) {
             return (
                 <div className="bg-white p-1 rounded-lg shadow-xl border" style={{ borderColor: info(column)?.gradient[1] }}>
-                    <p style={{ color: info(column)?.gradient[0]}}>
+                    <p style={{ color: info(column)?.gradient[0] }}>
                         Frequência: {payload[0].value.toFixed(2)}
                     </p>
                 </div>
@@ -284,7 +284,7 @@ export default function AsymmetryChart({ column }: Props){
                 {/* Status atual */}
                 <div className="p-2 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-lg border border-indigo-300">
                     <p className="text-sm font-semibold text-gray-700">
-                        ✨ Sua distribuição: <span className={interpretation.color}>{interpretation.title}</span> com skewness de <span className="font-mono text-lg">{data.skewness.toFixed(4)}</span>
+                        <span className={interpretation.color}>{interpretation.title}</span> com skewness de <span className="font-mono text-lg">{data.skewness.toFixed(4)}</span>
                     </p>
                 </div>
             </div>

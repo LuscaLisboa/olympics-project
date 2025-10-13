@@ -4,11 +4,11 @@ interface Props{
     column: "Age" | "Height" | "Weight";
     bins?: number;
     setData(data: { bin: string, count: number }[]): void;
-    setLoadingHistogram(is: boolean): void;
+    setLoading(is: boolean): void;
 } 
 
-export async function fetchHistogramData({column, bins, setData, setLoadingHistogram }: Props){
-    setLoadingHistogram(true);
+export async function fetchHistogramData({column, bins, setData, setLoading }: Props){
+    setLoading(true);
     
     try{
         fetch(`http://127.0.0.1:8000/histogram?column=${column}&bins=${bins}`)
@@ -23,6 +23,6 @@ export async function fetchHistogramData({column, bins, setData, setLoadingHisto
     }catch(error) {
         console.error("fetchHistogramData error: ", error);
     }finally{
-        setLoadingHistogram(false);
+        setLoading(false);
     }
 }

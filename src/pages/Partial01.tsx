@@ -9,6 +9,7 @@ import HistogramChart from "../components/Charts/HistogramChart";
 import PercentileChart from "../components/Charts/PercentileChart";
 import DispersionMeasuresChart from "../components/Charts/DispersionMeasuresChart";
 import AsymmetryChart from "../components/Charts/AsymmetryChart";
+import KurtosisChart from "../components/Charts/KurtosisChart";
 
 export default function Partial01(){
     const navigate = useNavigate();
@@ -202,8 +203,10 @@ export default function Partial01(){
                                     </div>
                                 ) : null}
                                 {g.label === "Curtose" ? (
-                                    <div>
-A
+                                    <div className="w-full flex flex-col gap-4">
+                                        <KurtosisChart column="Age"/>
+                                        <KurtosisChart column="Height"/>
+                                        <KurtosisChart column="Weight"/>
                                     </div>
                                 ) : null}
                             </div>

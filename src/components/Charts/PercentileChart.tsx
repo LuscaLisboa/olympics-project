@@ -9,10 +9,10 @@ interface Props{
 
 export default function PercentileChart({ column }: Props){
     const [data, setData] = useState<{ percentile: number, value: number }[]>([]);
-    const [loadingPercentile, setLoadingPercentile] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-            fetchPercentileData({column, setData, setLoadingPercentile});
+            fetchPercentileData({column, setData, setLoading});
         }, [column])
 
     const CustomTooltip = ({ active, payload, column }: any) => {
@@ -30,7 +30,7 @@ export default function PercentileChart({ column }: Props){
         return null;
     };
 
-    if (loadingPercentile) {
+    if (loading) {
         return (
             <div className={`bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-lg p-6`}>
                 <div className="animate-pulse">

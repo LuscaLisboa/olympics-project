@@ -10,13 +10,13 @@ interface Props {
 
 export default function DispersionMeasuresChart({ column }: Props){
     const [data, setData] = useState<DispersionData>();
-    const [loadingDispersionMeasures, setLoadingDispersionMeasures] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchDispersionData({column, setData, setLoadingDispersionMeasures})
+        fetchDispersionData({column, setData, setLoading})
     }, [column]);
 
-    if (loadingDispersionMeasures || !data) {
+    if (loading || !data) {
         return (
             <div className={`bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-lg p-6`}>
                 <div className="animate-pulse">

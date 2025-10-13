@@ -3,11 +3,11 @@ import type { PercentileData } from "../types/percentile_data";
 interface Props{
     column: "Age" | "Height" | "Weight";
     setData(data: { percentile: number, value: number }[]): void;
-    setLoadingPercentile(is: boolean): void;
+    setLoading(is: boolean): void;
 } 
 
-export async function fetchPercentileData({column, setData, setLoadingPercentile }: Props){
-    setLoadingPercentile(true);
+export async function fetchPercentileData({column, setData, setLoading }: Props){
+    setLoading(true);
 
     try{
         fetch(`http://127.0.0.1:8000/percentile?column=${column}`)
@@ -22,6 +22,6 @@ export async function fetchPercentileData({column, setData, setLoadingPercentile
     }catch(error) {
         console.error("fetchPercentileData error: ", error);
     }finally{
-        setLoadingPercentile(false);
+        setLoading(false);
     }
 }
