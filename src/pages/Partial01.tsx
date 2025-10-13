@@ -36,7 +36,7 @@ export default function Partial01(){
         {label: "Percentil" , desc: "medidas que dividem a amostra em 100 partes, cada uma com uma percentagem de dados aproximadamente igual"},
         {label: "Medidas de dispersão" , desc: "mostra o quão esticada ou espremida uma distribuição é"},
         {label: "Assimetria" , desc: "medida da falta de simetria de uma determinada distribuição de frequência"},
-        {label: "Curtose" , desc: ""}
+        {label: "Curtose" , desc: "medida de forma que caracteriza o achatamento da curva da função de distribuição de probabilidade"}
     ];
 
     return (
