@@ -126,7 +126,7 @@ export default function KurtosisChart({ column }: Props){
         
         return (
             <div className="w-full bg-white/60 backdrop-blur-sm rounded-xl p-2 border border-gray-200 grid gap-4">
-                <h3 className="text-lg font-bold text-gray-800 flex items-center">
+                <h3 className="text-lg font-bold text-gray-800 items-center">
                     Indicador de Curtose
                 </h3>
 
@@ -271,13 +271,12 @@ export default function KurtosisChart({ column }: Props){
                 <KurtosisIndicator kurtosis={data.kurtosis} />
 
                 {/* Curva de Distribuição */}
-                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-gray-200">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <span className="text-2xl">📊</span>
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-2 border border-gray-200">
+                    <h3 className="text-lg font-bold text-gray-800 items-center">
                         Curva de Distribuição
                     </h3>
                     <ResponsiveContainer width="100%" height={280}>
-                        <ComposedChart data={distributionData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                        <ComposedChart data={distributionData} margin={{ top: 0, right: 5, left: -30, bottom: 0 }}>
                             <defs>
                                 <linearGradient id={`gradient-adjusted-${column}`} x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor={info(column)?.gradient[0]} stopOpacity={0.8}/>
@@ -306,9 +305,8 @@ export default function KurtosisChart({ column }: Props){
             </div>
 
             {/* Gráfico Comparativo das Três Distribuições */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <span className="text-2xl">📈</span>
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-2 border border-gray-200">
+                <h3 className="text-lg font-bold text-gray-800 items-center">
                     Comparação das Distribuições
                 </h3>
                 <ResponsiveContainer width="100%" height={350}>
@@ -390,9 +388,9 @@ export default function KurtosisChart({ column }: Props){
                     </table>
                 </div>
                 {/* Status atual */}
-                <div className="mt-4 p-4 bg-gradient-to-r from-violet-100 to-purple-100 rounded-lg border border-violet-300">
+                <div className="p-2 bg-gradient-to-r from-violet-100 to-purple-100 rounded-lg border border-violet-300">
                     <p className="text-sm font-semibold text-gray-700">
-                        ✨ Sua distribuição é <span className={interpretation.color}>{interpretation.title}</span> com curtose de <span className="font-mono text-lg font-bold">{data.kurtosis}</span>
+                        <span className={interpretation.color}>{interpretation.title}</span> com curtose de <span className="font-mono text-lg font-bold">{data.kurtosis}</span>
                     </p>
                 </div>
             </div>
