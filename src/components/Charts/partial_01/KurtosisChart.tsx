@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchKurtosisData } from "../../functions/fetchKurtosisData";
-import type { KurtosisData } from "../../types/kurtosis_data";
-import { info } from "../../functions/info_getColumnInfo";
+import type { KurtosisData } from "../../../types/kurtosis_data";
+import { info } from "../../../functions/info_getColumnInfo";
 import { Area, CartesianGrid, ComposedChart, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 interface Props{
@@ -10,11 +9,18 @@ interface Props{
 
 export default function KurtosisChart({ column }: Props){
     const [data, setData] = useState<KurtosisData>();
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-            fetchKurtosisData({column, setData, setLoading});
-        }, [column])
+        try{
+            fetch(`http://127.0.0.1:8000/dispersion_measures?column=${column}`)
+            .then((res) => res.json())
+            .then((json: KurtosisData) => {
+                setData(json);
+            })
+        }catch(error) {
+            console.error("fetchDispersionData error: ", error);
+        }
+    }, [column])
 
     const generateDistributionCurves = (kurtosis: number) => {
         const points: { x: number; normal: number; adjusted: number }[] = [];
@@ -174,7 +180,7 @@ export default function KurtosisChart({ column }: Props){
         );
     };
 
-    if (loading || !data) {
+    if (!data) {
         return (
             <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-fuchsia-50 rounded-2xl shadow-lg p-6">
                 <div className="animate-pulse">

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import type { AsymmetryData } from "../../types/asymmetry_data";
-import { fetchAsymmetryData } from "../../functions/fetchAsymmetryData";
+import type { AsymmetryData } from "../../../types/asymmetry_data";
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { info } from "../../functions/info_getColumnInfo";
+import { info } from "../../../functions/info_getColumnInfo";
 
 interface Props{
     column: "Age" | "Height" | "Weight";
@@ -10,13 +9,20 @@ interface Props{
 
 export default function AsymmetryChart({ column }: Props){
     const [data, setData] = useState<AsymmetryData>();
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchAsymmetryData({column, setData, setLoading})
+        try{
+            fetch(`http://127.0.0.1:8000/asymmetry?column=${column}`)
+            .then((res) => res.json())
+            .then((json: AsymmetryData) => {
+                setData(json);
+            })
+        }catch(error) {
+            console.error("fetchDispersionData error: ", error);
+        }
     }, [column]);
 
-    if (loading || !data) {
+    if (!data) {
         return (
             <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-2xl shadow-lg p-6">
                 <div className="animate-pulse">

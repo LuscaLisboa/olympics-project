@@ -3,22 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { BlockMath } from "react-katex";
 import { useEffect, useState } from "react";
 import type { StatisticsValues } from "../types/statistics_values";
-import { fetchStatisticsData } from "../functions/fetchStatisticsData";
 import RenderStatistics from "../components/RenderStatistics";
-import HistogramChart from "../components/Charts/HistogramChart";
-import PercentileChart from "../components/Charts/PercentileChart";
-import DispersionMeasuresChart from "../components/Charts/DispersionMeasuresChart";
-import AsymmetryChart from "../components/Charts/AsymmetryChart";
-import KurtosisChart from "../components/Charts/KurtosisChart";
+import HistogramChart from "../components/Charts/partial_01/HistogramChart";
+import PercentileChart from "../components/Charts/partial_01/PercentileChart";
+import DispersionMeasuresChart from "../components/Charts/partial_01/DispersionMeasuresChart";
+import AsymmetryChart from "../components/Charts/partial_01/AsymmetryChart";
+import KurtosisChart from "../components/Charts/partial_01/KurtosisChart";
 
 export default function Partial01(){
     const navigate = useNavigate();
 
-    const [statisticsData, setStatisticsData] = useState<StatisticsValues | null>(null)
-    const [loadingStatistics, setLoadingStatistics] = useState(true);
+    const [data, setData] = useState<StatisticsValues>()
     
     useEffect(() => {
-        fetchStatisticsData({ setStatisticsData, setLoadingStatistics });
+        try{
+            fetch('http://127.0.0.1:8000/statistics')
+            .then((res) => res.json())
+            .then((json: StatisticsValues) => {
+                setData(json);
+            })
+        } catch(error) {
+            console.error("fetchStatisticsData error: ", error);
+        }
     }, [])
 
     const statisticsFormula = [
@@ -145,9 +151,9 @@ export default function Partial01(){
                             </div>
                             <div className="pb-4 pl-4 pr-4">
                                 <div className="w-full"> 
-                                    {loadingStatistics ? (
+                                    {!data ? (
                                         <p>Carregando...</p>
-                                    ) : RenderStatistics(f.op, statisticsData)}
+                                    ) : RenderStatistics(f.op, data)}
                                 </div>
                             </div>
 

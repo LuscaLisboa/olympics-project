@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchHistogramData } from "../../functions/fetchHistogramData";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { info } from "../../functions/info_getColumnInfo";
+import { info } from "../../../functions/info_getColumnInfo";
+import type { HistogramData } from "../../../types/histogram_data";
 
 interface Props{
     column: "Age" | "Height" | "Weight";
@@ -10,10 +10,21 @@ interface Props{
 
 export default function HistogramChart({ column, bins = 10 }: Props) {
     const [data, setData] = useState<{ bin: string, count: number }[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchHistogramData({column, bins, setData, setLoading});
+        try{
+            fetch(`http://127.0.0.1:8000/histogram?column=${column}&bins=${bins}`)
+            .then((res) => res.json())
+            .then((json: HistogramData) => {
+                const formatted = json.bins.map((bin, i) => ({
+                    bin,
+                    count: json.counts[i],
+                }));
+                setData(formatted);
+            });
+        }catch(error) {
+            console.error("fetchHistogramData error: ", error);
+        }
     }, [column, bins])
 
     const CustomTooltip = ({active, payload, label}: any) => {
@@ -34,7 +45,7 @@ export default function HistogramChart({ column, bins = 10 }: Props) {
                 <p className={`text-sm font-semibold`} style={{ color: info(column)?.gradient[0] }}>{info(column)?.title}</p>
                 <p className="text-sm text-gray-600">{info(column)?.subtitle}</p>
             </div>
-            {!loading && (
+            {!data && (
                 <ResponsiveContainer width={900} height={350}>
                     <BarChart data={data} margin={{ top: 5, right: 5, left: 1, bottom: 5 }}>
                         <defs>

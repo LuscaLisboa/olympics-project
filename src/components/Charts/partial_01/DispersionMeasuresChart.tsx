@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchDispersionData } from "../../functions/fetchDispersionData";
-import type { DispersionData } from "../../types/dispersion_data";
-import { info } from "../../functions/info_getColumnInfo";
+import type { DispersionData } from "../../../types/dispersion_data";
+import { info } from "../../../functions/info_getColumnInfo";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip} from "recharts";
 
 interface Props {
@@ -10,13 +9,20 @@ interface Props {
 
 export default function DispersionMeasuresChart({ column }: Props){
     const [data, setData] = useState<DispersionData>();
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchDispersionData({column, setData, setLoading})
+        try{
+            fetch(`http://127.0.0.1:8000/dispersion_measures?column=${column}`)
+            .then((res) => res.json())
+            .then((json: DispersionData) => {
+                setData(json);
+            })
+        }catch(error) {
+            console.error("fetchDispersionData error: ", error);
+        }
     }, [column]);
 
-    if (loading || !data) {
+    if (!data) {
         return (
             <div className={`bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-lg p-6`}>
                 <div className="animate-pulse">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchPercentileData } from "../../functions/fetchPercentileData";
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { info } from "../../functions/info_getColumnInfo";
+import { info } from "../../../functions/info_getColumnInfo";
+import type { PercentileData } from "../../../types/percentile_data";
 
 interface Props{
     column: "Age" | "Height" | "Weight";
@@ -9,10 +9,21 @@ interface Props{
 
 export default function PercentileChart({ column }: Props){
     const [data, setData] = useState<{ percentile: number, value: number }[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-            fetchPercentileData({column, setData, setLoading});
+            try{
+                fetch(`http://127.0.0.1:8000/percentile?column=${column}`)
+                .then((res) => res.json())
+                .then((json: PercentileData) => {
+                    const formatted = json.percentiles.map((p, i) => ({
+                        percentile: p,
+                        value: json.values[i],
+                    }));
+                    setData(formatted);
+                });
+            }catch(error) {
+                console.error("fetchPercentileData error: ", error);
+            }
         }, [column])
 
     const CustomTooltip = ({ active, payload, column }: any) => {
@@ -30,7 +41,7 @@ export default function PercentileChart({ column }: Props){
         return null;
     };
 
-    if (loading) {
+    if (!data) {
         return (
             <div className={`bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-lg p-6`}>
                 <div className="animate-pulse">
