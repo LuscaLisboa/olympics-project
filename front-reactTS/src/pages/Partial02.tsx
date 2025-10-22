@@ -202,15 +202,32 @@ export default function Partial02(){
                             <span>Técnica que modela a relação entre uma variável dependente e uma ou mais variáveis independentes, permitindo quantificar e prever a relação entre elas</span>
                         </div>
                     </div>
-                    <p className="text-slate-600 leading-relaxed">
-                        <div className="grid grid-cols-2 gap-8">
-                            <div className="justify-end grid gap-0">
-                                
+                    <p className="text-slate-600 leading-relaxed grid-rows-2 gap-2">
+                        <div>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div className="justify-end grid gap-0">
+                                    <span><BlockMath math="\small \beta_0 \text{ : intercepto}"/></span>
+                                    <span><BlockMath math="\small \beta_1 \text{ : coeficiente angular}"/></span>
+                                </div>
+                                <div className="">
+                                    <BlockMath math="\huge y = \beta_0 + \beta_1 x" />
+                                </div>
                             </div>
-                            <div className="">
-                            </div>
+                            <RegressionChart title="Regressão Linear" isNonLinear={false} />
                         </div>
-                        <RegressionChart />
+                        <div>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div className="justify-end grid gap-0">
+                                    <span><BlockMath math="\small K \text{ : capacidade de suporte}" /></span>
+                                    <span><BlockMath math="\small a \text{ : população inicial}" /></span>
+                                    <span><BlockMath math="\small r \text{ : taxa de crescimento}" /></span>
+                                </div>
+                                <div className="">
+                                    <BlockMath math="\huge P(t) = \frac{K}{1 + ae^{-rt}}" />
+                                </div>
+                            </div>
+                            <RegressionChart title="Regressão Não Linear" isNonLinear={true} />
+                        </div>
                     </p> 
                     <div>
                     </div>

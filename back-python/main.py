@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 # Data Import
-df = pd.read_csv("athlete_events.csv")
+df = pd.read_csv("src/athlete_events.csv")
 
 numericals = ["Age", "Height", "Weight"]
 df_num = df[numericals].dropna()

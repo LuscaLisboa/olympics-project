@@ -44,7 +44,7 @@ export default function RegressionChart({
 
   useEffect(() => {
     const endpoint = isNonLinear
-      ? "nonlinear_regression"
+      ? "non_linear_regression"
       : "linear_regression";
 
     setLoading(true);

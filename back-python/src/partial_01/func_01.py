@@ -1,26 +1,58 @@
+import math
+from numbers import Number
+
 from fastapi import Query, HTTPException
-from scipy import stats
+
+
+def _ensure_non_empty(series, column):
+    cleaned = series.dropna()
+    if cleaned.empty:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Column '{column}' does not contain valid numerical data.",
+        )
+    return cleaned
+
+
+def _to_serializable_number(value):
+    if value is None:
+        return None
+    if isinstance(value, Number):
+        value = float(value)
+        if math.isnan(value) or math.isinf(value):
+            return None
+        return value
+    return None
 
 
 def statistics_func(numericals, df_num):
     results = {}
 
     for col in numericals:
-        serie = df_num[col]
+        serie = _ensure_non_empty(df_num[col], col)
+
+        mode_series = serie.mode()
+        mode_value = _to_serializable_number(mode_series.iloc[0]) if not mode_series.empty else None
 
         results[col] = {
             "average": float(serie.mean()),
             "median": float(serie.median()),
-            "mode": float(stats.mode(serie, keepdims=True).mode[0]),
-            "variance": float(serie.var(ddof=0)),     # sample
-            "standard_deviation": float(serie.std(ddof=0)),
+            "mode": mode_value,
+            "variance": _to_serializable_number(serie.var(ddof=1)),
+            "standard_deviation": _to_serializable_number(serie.std(ddof=1)),
         }
 
     # Covariance
-    covariance = df_num.cov().to_dict()
+    covariance = {
+        row: {col: _to_serializable_number(value) for col, value in values.items()}
+        for row, values in df_num.cov().to_dict().items()
+    }
 
     # Pearson Correlation
-    correlation = df_num.corr(method="pearson").to_dict()
+    correlation = {
+        row: {col: _to_serializable_number(value) for col, value in values.items()}
+        for row, values in df_num.corr(method="pearson").to_dict().items()
+    }
 
     return {
         "statistics": results,
@@ -35,25 +67,19 @@ def histogram_func(df, pd, column: str = Query(..., regex="^(Age|Height|Weight)$
 
     series = df[column].dropna()
 
-    if column == "Age":
-        series = series.round().astype(int)
-        hist, bin_edges = pd.cut(series, bins=bins, retbins=True)
-        counts = hist.value_counts().sort_index()
+    series = _ensure_non_empty(df[column], column)
 
-        bins_formatted = []
-        for interval in counts.index:
-            left = int(interval.left)
-            right = int(interval.right)
-            bins_formatted.append(f"{left}-{right}")
-    else:
-        hist, bin_edges = pd.cut(series, bins=bins, retbins=True)
-        counts = hist.value_counts().sort_index()
+    decimals = 0 if column == "Age" else 1
+    hist, _ = pd.cut(series, bins=bins, retbins=True, include_lowest=True)
+    counts = hist.value_counts().sort_index()
 
-        bins_formatted = []
-        for interval in counts.index:
-            left = round(interval.left, 1)
-            right = round(interval.right, 1)
-            bins_formatted.append(f"{left}-{right}")
+    bins_formatted = []
+    for interval in counts.index:
+        left = round(interval.left, decimals)
+        right = round(interval.right, decimals)
+        if decimals == 0:
+            left, right = int(left), int(right)
+        bins_formatted.append(f"{left}-{right}")
 
     return {
         "column": column,
@@ -66,13 +92,13 @@ def percentile_func(df, np, column: str = Query(..., regex="^(Age|Height|Weight)
     if column not in df.columns:
         raise HTTPException(status_code=400, detail="Invalid Column")
 
-    series = df[column].dropna()
+    series = _ensure_non_empty(df[column], column)
 
     percentiles = [0, 10, 25, 50, 75, 90, 95, 99, 100]
     values = np.percentile(series, percentiles)
 
     precision = 0 if column == "Age" else 1
-    values = [round(v, precision) for v in values]
+    values = [round(float(v), precision) for v in values]
 
     return {
         "column": column,
@@ -85,12 +111,17 @@ def dispersion_mearures_func(df, column: str = Query(..., regex="^(Age|Height|We
     if column not in df.columns:
         raise HTTPException(status_code=400, detail="Invalid Column")
 
-    series = df[column].dropna()
+    series = _ensure_non_empty(df[column], column)
 
-    amplitude = series.max() - series.min()
-    variance = series.var(ddof=1)
-    standard_deviation = series.std(ddof=1)
-    coef_var = (standard_deviation / series.mean()) * 100
+    amplitude = float(series.max() - series.min())
+    variance = _to_serializable_number(series.var(ddof=1))
+    standard_deviation = _to_serializable_number(series.std(ddof=1))
+
+    mean_value = series.mean()
+    if abs(mean_value) < 1e-12 or standard_deviation is None:
+        coef_var = None
+    else:
+        coef_var = float((standard_deviation / mean_value) * 100)
 
     return {
         "column": column,
@@ -105,15 +136,14 @@ def asymmetry_func(df, column: str = Query(..., regex="^(Age|Height|Weight)$")):
     if column not in df.columns:
         raise HTTPException(status_code=400, detail="Invalid Column")
 
-    series = df[column].dropna()
+    series = _ensure_non_empty(df[column], column)
 
-    # Asymetry calc (skewness)
-    skewness = series.skew()
+    skewness = float(series.skew())
 
-    # Basic interpretation
-    if skewness > 0:
+    tolerance = 1e-4
+    if skewness > tolerance:
         interpretation = "positive"
-    elif skewness < 0:
+    elif skewness < -tolerance:
         interpretation = "negative"
     else:
         interpretation = "symmetric"
@@ -129,20 +159,21 @@ def kurtosis_func(df, column: str = Query(..., regex="^(Age|Height|Weight)$")):
     if column not in df.columns:
         raise HTTPException(status_code=400, detail="Invalid Column")
 
-    series = df[column].dropna()
+    series = _ensure_non_empty(df[column], column)
 
-    kurtosis = series.kurt()
+    kurtosis = float(series.kurt())
 
-    if kurtosis > 3:
+    tolerance = 1e-4
+    if kurtosis > tolerance:
         interpretation = "leptokurtic"
-    elif kurtosis < 3:
+    elif kurtosis < -tolerance:
         interpretation = "platykurtic"
     else:
         interpretation = "mesokurtic"
 
     return {
         "column": column,
-        "kurtosis": kurtosis,
+        "kurtosis": round(kurtosis, 4),
         "interpretation": interpretation
     }
 
